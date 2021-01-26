@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Training.Models.Profiling>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NIK)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Education_Id)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NIK)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Education_Id)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.NIK">Edit</a> |
+                    <a href="#" onclick="Delete(@item.NIK)">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function Delete(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            comfirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            comfirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "/Profiling/Delete/",
+                    data: { id: id }
+                }).done(function (data) {
+                    if (data == 1) {
+                        Swal.fire(
+                            'Deleted!',
+                            'Your file has been deleted.',
+                            'success'
+                        )
+                        location.reload();
+                    }
+                }).fail(function (data) {
+                    console.log(data);
+                })
+            }
+        })
+    }
+</script>
